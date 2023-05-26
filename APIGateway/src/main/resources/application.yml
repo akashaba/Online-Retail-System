@@ -1,0 +1,68 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: APIGateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - HEAD
+      routes:
+        - id: OnlineRetailSystem
+          uri: lb://OnlineRetailSystem
+          predicates:
+            - Path=/customer/**,/product/**,/orders/**
+
+  datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      password: P@ssw0rd
+      url: jdbc:mysql://localhost:3306/online_retail_system?useLegacyDatetimeCode=false&serverTimezone=UTC
+      username: admin
+  jpa:
+      hibernate:
+        ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL5Dialect
+      show-sql: true
+
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
+
+jwt:
+  secret: secret
+  message: Login Successful!
+
+backend:
+  url: /customer,/customer/**,/product,/product/**,/shopping,/shopping/**,/carts,/carts/**
+
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        web: info
+        security: info
+      hibernate: info
+
+
